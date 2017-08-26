@@ -17,6 +17,7 @@
     "mocha": "^3.5.0",
     "nunjucks-tags": "file:///Users/gaggle/Projects/nunjucks-tags",
     "nyc": "^11.1.0",
+    "recursive-readdir-sync": "^1.0.6",
     "xmldom": "^0.1.27"
   }
 }

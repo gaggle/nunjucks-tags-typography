@@ -1,7 +1,7 @@
 {
   "name": "nunjucks-tags-typography",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "nyc --all mocha && npm run cov",
     "cov": "nyc report --reporter=html"

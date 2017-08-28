@@ -1,9 +1,12 @@
 <div>
-  {% blockquote %} Quote {% endblockquote %}
+  {% blockquote %} quote {% endblockquote %}
 </div>
 <div id="Author">
-  {% blockquote Mr. Foo %} Quote {% endblockquote %}
+  {% blockquote mr. foo %} quote {% endblockquote %}
 </div>
 <div id="AuthorTitle">
-  {% blockquote Mr. Foo, Bar %} Quote {% endblockquote %}
+  {% blockquote mr. foo, bar baz %} quote {% endblockquote %}
+</div>
+<div id="AuthorTitle with titlecase" data-config-titlecase="true">
+  {% blockquote mr. foo, bar baz %} quote {% endblockquote %}
 </div>

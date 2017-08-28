@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "main": "lib/index.js",
   "scripts": {
-    "test": "nyc --all mocha && npm run cov",
-    "cov": "nyc report --reporter=html"
+    "test": "nyc mocha && npm run covreport",
+    "covreport": "nyc report --reporter=html"
   },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
   "license": "ISC",
@@ -18,5 +18,19 @@
     "nyc": "^11.1.0",
     "recursive-readdir-sync": "^1.0.6",
     "xmldom": "^0.1.27"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "lib/**/*.js",
+      "test/**/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ]
   }
 }

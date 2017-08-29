@@ -31,10 +31,10 @@ const toBool = function (str) {
 exports.generateTestcaseName = function (xml) {
   try {
     let id = xml.getAttribute('id')
-    return `converts ${id.toLowerCase()}`
+    return `converts ${id.toLowerCase()}`.trim()
   } catch (ex) {
   }
-  return `converts`
+  return "converts"
 }
 
 exports.initCustomAsserts = function (assert) {

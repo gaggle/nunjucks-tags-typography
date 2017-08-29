@@ -41,6 +41,29 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#generateTestcaseName", function () {
+    it("includes id in generated name", function () {
+      assert.deepEqual(
+        helpers.generateTestcaseName(element('id="foo"')),
+        "converts foo"
+      )
+    })
+
+    it("returns default if id is missing", function () {
+      assert.deepEqual(
+        helpers.generateTestcaseName(element()),
+        "converts"
+      )
+    })
+
+    it("returns default for attributes-less object", function () {
+      assert.deepEqual(
+        helpers.generateTestcaseName({}),
+        "converts"
+      )
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])

@@ -88,6 +88,14 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#nodeListToArr", function () {
+    it("converts element's nodeList to real array", function () {
+      const el = element('id="foo"', 'class="bar baz"')
+      const result = helpers.nodeListToArr(el.attributes)
+      assert(Array.isArray(result), "Result must be of type array")
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])

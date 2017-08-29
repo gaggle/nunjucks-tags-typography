@@ -65,6 +65,29 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#initCustomAsserts", function () {
+    beforeEach(() => delete require.cache["assert"])
+
+    it("modifies assert to include xmlEqual", function () {
+      let obj = {}
+      helpers.initCustomAsserts(obj)
+      assert(Object.keys(obj).indexOf("xmlEqual") !== -1)
+    })
+
+    it("exposes function to compare alike xml objects", function () {
+      const module = require("assert")
+      helpers.initCustomAsserts(module)
+      module.xmlEqual(element(), element())
+    })
+
+    it("exposes function that asserts on disalike objects", function () {
+      const module = require("assert")
+      helpers.initCustomAsserts(module)
+      const fn = () => module.xmlEqual(element('foo="bar"'), element())
+      assert.throws(fn, Error, "xmlEqual should throw")
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])

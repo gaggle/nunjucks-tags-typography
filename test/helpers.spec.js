@@ -112,6 +112,13 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#strToXml", function () {
+    it("converts string to xml object", function () {
+      const el = helpers.strToXML("<div></div>")
+      assert.equal(el.constructor.name, "Document")
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])

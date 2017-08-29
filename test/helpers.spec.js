@@ -3,12 +3,6 @@ const helpers = require("./helpers")
 
 describe("test.helpers", function () {
   describe("#extractConfig", function () {
-
-    const element = function (...attrs) {
-      let document = helpers.strToXML(`<div ${attrs.join(" ")}></div>`);
-      return document.childNodes[0]
-    }
-
     it("returns empty from attributes-less object", function () {
       const result = helpers.extractConfig({})
       assert.deepEqual(result, {})
@@ -74,3 +68,8 @@ describe("test.helpers", function () {
     })
   })
 })
+
+const element = function (...attrs) {
+  let document = helpers.strToXML(`<div ${attrs.join(" ")}></div>`);
+  return document.childNodes[0]
+}

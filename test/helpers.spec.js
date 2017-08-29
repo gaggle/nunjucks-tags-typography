@@ -96,6 +96,22 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#readFile", function () {
+    it("resolves with content of file", function () {
+      return helpers.readFile(__filename)
+        .then(result => {
+          assert(Buffer.isBuffer(result), "Result must be of type buffer")
+        })
+    })
+
+    it("rejects on error", function () {
+      return helpers.readFile("foo")
+        .catch(err => {
+          assert.equal(typeof err, typeof Error(), "Promise must reject with error")
+        })
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])

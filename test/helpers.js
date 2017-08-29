@@ -8,22 +8,24 @@ const xmldom = require("xmldom")
 
 const parser = new xmldom.DOMParser()
 
+let DATA_CONFIG_SEARCHSTRING = "data-config-"
+
 exports.extractConfig = function (xml) {
   let conf = {}
-  if (!xml.attributes) return conf
-
-  let attributes = exports.nodeListToArr(xml.attributes)
-  if (!attributes.length) return conf
-
-  let searchString = "data-config-"
-  let filteredAttributes = attributes.filter(attr => attr.name.startsWith(searchString))
-
-  filteredAttributes.forEach(attr => {
-    let key = attr.name.replace(searchString, "")
-    conf[key] = attr.value === "true"
-    xml.removeAttribute(attr.name)
-  })
+  exports.nodeListToArr(xml.attributes || [])
+    .filter(attr => attr.name.startsWith(DATA_CONFIG_SEARCHSTRING))
+    .forEach(attr => {
+      let key = attr.name.replace(DATA_CONFIG_SEARCHSTRING, "")
+      conf[key] = toBool(attr.value)
+      xml.removeAttribute(attr.name)
+    })
   return conf
+}
+
+const toBool = function (str) {
+  if (str === "true") return true
+  if (str === "false") return false
+  return str
 }
 
 exports.generateTestcaseName = function (xml) {

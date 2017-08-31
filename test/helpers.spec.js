@@ -173,6 +173,15 @@ describe("test.helpers", function () {
       ])
     })
 
+    it("allows prioritising of multiple filenames", function () {
+      const result = callWalkFixtures({prioritise: ["second"]})
+      assert.deepEqual(next(result), [
+        "dir",
+        path.join(__dirname, "dir", "second"),
+        path.join(__dirname, "dir", "first")
+      ])
+    })
+
     it("allows use of American prioritize", function () {
       const result = callWalkFixtures({prioritize: "second"})
       assert.deepEqual(next(result), [

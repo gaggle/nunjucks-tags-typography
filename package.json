@@ -1,22 +1,37 @@
 {
   "name": "nunjucks-tags-typography",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "nyc --all mocha && npm run cov",
-    "cov": "nyc report --reporter=html"
+    "test": "nyc mocha && npm run covreport",
+    "covreport": "nyc report --reporter=html"
   },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
   "license": "ISC",
   "dependencies": {
-    "nunjucks-tags": "file:///Users/gaggle/Projects/nunjucks-tags",
     "titlecase": "^1.1.2"
   },
   "devDependencies": {
     "dom-compare": "^0.3.1",
     "mocha": "^3.5.0",
+    "mock-fs": "^4.4.1",
     "nunjucks-tags": "file:///Users/gaggle/Projects/nunjucks-tags",
     "nyc": "^11.1.0",
+    "recursive-readdir-sync": "^1.0.6",
     "xmldom": "^0.1.27"
+  },
+  "nyc": {
+    "all": true,
+    "include": [
+      "lib/**/*.js",
+      "test/**/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ]
   }
 }

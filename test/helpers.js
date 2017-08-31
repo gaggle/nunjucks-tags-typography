@@ -78,9 +78,8 @@ exports.strToXML = function (str) {
   return parser.parseFromString(str, "text/xml")
 }
 
-exports.walkElementPairs = function* (...filePaths) {
-  const content = filePaths.map(fp => fs.readFileSync(fp).toString())
-  const XMLs = content.map(d => [exports.strToXML(d)])
+exports.walkChildNodePairs = function* (...documents) {
+  const XMLs = documents.map(d => [exports.strToXML(d)])
   for (let item of exports.zip(...XMLs)) {
     let childNodes = item.map(e => exports.nodeListToArr(e.childNodes))
     for (let children of exports.zip(...childNodes)) {

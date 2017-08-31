@@ -119,6 +119,27 @@ describe("test.helpers", function () {
     })
   })
 
+  describe("#walkChildNodePairs", function () {
+    it("returns generator of arrays", function () {
+      const paired = helpers.walkChildNodePairs('<div/>', '<div/>')
+      let actual = next(paired)
+      assert(Array.isArray(actual), "Elements of generator must be arrays")
+    })
+
+    it("zips elements", function () {
+      const letters = '<div id="a"/><div id="b"/>'
+      const numbers = '<div id="1"/><div id="2"/>'
+      const paired = helpers.walkChildNodePairs(letters, numbers)
+
+      assert.deepEqual(
+        next(paired).map(e => e.toString()),
+        ['<div id="a"/>', '<div id="1"/>'])
+      assert.deepEqual(
+        next(paired).map(e => e.toString()),
+        ['<div id="b"/>', '<div id="2"/>'])
+    })
+  })
+
   describe("#zip", function () {
     it("combines 1 array", function () {
       const result = helpers.zip(["a"])
@@ -150,4 +171,8 @@ describe("test.helpers", function () {
 const element = function (...attrs) {
   let document = helpers.strToXML(`<div ${attrs.join(" ")}></div>`);
   return document.childNodes[0]
+}
+
+const next = function (iterable) {
+  return iterable.next().value
 }

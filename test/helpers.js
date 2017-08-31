@@ -10,6 +10,11 @@ const parser = new xmldom.DOMParser()
 
 let DATA_CONFIG_SEARCHSTRING = "data-config-"
 
+/**
+ *
+ * @param {Element} xml
+ * @returns {Object.<string, string|Boolean>}
+ */
 exports.extractConfig = function (xml) {
   let conf = {}
   exports.nodeListToArr(xml.attributes || [])
@@ -28,6 +33,11 @@ const toBool = function (str) {
   return str
 }
 
+/**
+ *
+ * @param {Element} xml
+ * @returns {string}
+ */
 exports.generateTestcaseName = function (xml) {
   try {
     let id = xml.getAttribute('id')
@@ -37,6 +47,9 @@ exports.generateTestcaseName = function (xml) {
   return "converts"
 }
 
+/**
+ * @param {Module} assert
+ */
 exports.initCustomAsserts = function (assert) {
   assert.xmlEqual = function (expected, actual) {
     let comp = compare(expected, actual, {stripSpaces: true})
@@ -53,17 +66,20 @@ ${actual}`
 }
 
 /**
- * @returns {Array}
+ * @param {NodeList|Array} nodeList
+ * @returns {Element[]}
  */
-exports.nodeListToArr = function (obj) {
+exports.nodeListToArr = function (nodeList) {
   let array = []
-  for (let i = obj.length >>> 0; i--;) {
-    array[i] = obj[i]
+  for (let i = nodeList.length >>> 0; i--;) {
+    array[i] = nodeList[i]
   }
   return array
 }
 
 /**
+ * @param {string} path
+ * @param {{}} [options]
  * @returns {Promise}
  */
 exports.readFile = function (path, options) {
@@ -74,10 +90,18 @@ exports.readFile = function (path, options) {
   })
 }
 
+/**
+ * @param {string} str
+ * @returns {Document|Element}
+ */
 exports.strToXML = function (str) {
   return parser.parseFromString(str, "text/xml")
 }
 
+/**
+ * @param {...Document|...Element} documents
+ * @yields {Element[]}
+ */
 exports.walkChildNodePairs = function* (...documents) {
   const XMLs = documents.map(d => [exports.strToXML(d)])
   for (let item of exports.zip(...XMLs)) {
@@ -88,6 +112,12 @@ exports.walkChildNodePairs = function* (...documents) {
   }
 }
 
+/**
+ * @param {string} dir
+ * @param {Object} [opts]
+ * @param {string|Array} [opts.prioritise]
+ * @param {string|Array} [opts.prioritize]
+ */
 exports.walkFixtures = function* (dir, opts = {}) {
   opts.prioritise = opts.prioritise || opts.prioritize || []
   dir = path.resolve(__dirname, dir)
@@ -110,6 +140,7 @@ exports.walkFixtures = function* (dir, opts = {}) {
 }
 
 /**
+ * @param {...} rows
  * @returns {Array}
  */
 exports.zip = function (...rows) {

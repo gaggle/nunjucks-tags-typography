@@ -1,5 +1,7 @@
 "use strict";
 const assert = require("assert")
+const mock = require("mock-fs")
+const path = require("path")
 const helpers = require("./helpers")
 
 describe("test.helpers", function () {
@@ -138,6 +140,57 @@ describe("test.helpers", function () {
         next(paired).map(e => e.toString()),
         ['<div id="b"/>', '<div id="2"/>'])
     })
+  })
+
+  describe("#walkFixtures", function () {
+    beforeEach(() => mockDir({'dir': {'first': '', 'second': ''}}))
+    afterEach(() => mock.restore())
+
+    it("returns generator of arrays", function () {
+      assert(Array.isArray(next(callWalkFixtures())))
+    })
+
+    it("has data with folder name first", function () {
+      let result = next(callWalkFixtures())
+      assert.deepEqual(result.shift(), "dir")
+    })
+
+    it("has data with remaining content being file paths", function () {
+      let result = next(callWalkFixtures())
+      result.shift() // Get rid of first element
+      assert.deepEqual(result, [
+        path.join(__dirname, "dir", "first"),
+        path.join(__dirname, "dir", "second")
+      ])
+    })
+
+    it("allows prioritising of a filename", function () {
+      const result = callWalkFixtures({prioritise: "second"})
+      assert.deepEqual(next(result), [
+        "dir",
+        path.join(__dirname, "dir", "second"),
+        path.join(__dirname, "dir", "first")
+      ])
+    })
+
+    it("allows use of American prioritize", function () {
+      const result = callWalkFixtures({prioritize: "second"})
+      assert.deepEqual(next(result), [
+        "dir",
+        path.join(__dirname, "dir", "second"),
+        path.join(__dirname, "dir", "first")
+      ])
+    })
+
+    const mockDir = function (config) {
+      const data = {}
+      data[__dirname] = config
+      mock(data)
+    }
+
+    const callWalkFixtures = function (opts = undefined) {
+      return helpers.walkFixtures(path.join(__dirname, "dir"), opts)
+    }
   })
 
   describe("#zip", function () {

@@ -105,8 +105,7 @@ exports.walkFixtures = function* (dir, opts = {}) {
   }
 
   for (let name of Object.keys(data)) {
-    let [expected, src] = data[name]
-    yield {name, expected, src}
+    yield [name, ...data[name]]
   }
 }
 

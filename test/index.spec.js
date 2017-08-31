@@ -12,6 +12,10 @@ describe("nunjucks-tags-typography", function () {
   let nunjucks
   beforeEach(() => nunjucks = new Nunjucks())
 
+  it("can initialise without specifying config", function () {
+    tags(nunjucks)
+  })
+
   for (let [name, ...filePaths] of helpers.walkFixtures("./fixtures", {prioritise: ["expected.html"]})) {
     describe(name, function () {
       const content = filePaths.map(fp => fs.readFileSync(fp).toString())

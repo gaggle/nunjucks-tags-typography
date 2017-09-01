@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "main": "lib/index.js",
   "scripts": {
-    "test": "nyc mocha && npm run covreport",
-    "covreport": "nyc report --reporter=html"
+    "test": "npm run _test && nyc report --reporter=html",
+    "test:ci": "npm run _test && nyc report --reporter=lcov > coverage.lcov && codecov",
+    "_test": "nyc --all mocha"
   },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
   "license": "ISC",

@@ -26,11 +26,15 @@ nunjucks.render("{% blockquote %} Quote! {% endblockquote %}")
   </div>
 ```
 
-To install:
+## Installation
 ```bash
 $ npm install https://github.com/gaggle/nunjucks-tags-typography --save
 ```
-(This package peer-depends on [nunjucks-tags])
+
+This package peer-depends on [nunjucks-tags] so you need to install that too:
+```bash
+$ npm install https://github.com/gaggle/nunjucks-tags --save
+```
 
 ## Development
 ![Graph of coverage/commits]

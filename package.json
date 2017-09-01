@@ -16,6 +16,7 @@
     "nunjucks-tags": "git+https://github.com/gaggle/nunjucks-tags.git"
   },
   "devDependencies": {
+    "codecov": "^2.3.0",
     "dom-compare": "^0.3.1",
     "mocha": "^3.5.0",
     "mock-fs": "^4.4.1",

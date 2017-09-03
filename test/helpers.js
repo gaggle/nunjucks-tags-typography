@@ -1,14 +1,14 @@
-"use strict";
-const compare = require("dom-compare").compare
-const fs = require("fs")
-const path = require("path")
-const recursiveReaddirSync = require("recursive-readdir-sync")
-const reporter = require("dom-compare").GroupingReporter
-const xmldom = require("xmldom")
+'use strict'
+const compare = require('dom-compare').compare
+const fs = require('fs')
+const path = require('path')
+const recursiveReaddirSync = require('recursive-readdir-sync')
+const reporter = require('dom-compare').GroupingReporter
+const xmldom = require('xmldom')
 
 const parser = new xmldom.DOMParser()
 
-let DATA_CONFIG_SEARCHSTRING = "data-config-"
+let DATA_CONFIG_SEARCHSTRING = 'data-config-'
 
 /**
  *
@@ -20,7 +20,7 @@ exports.extractConfig = function (xml) {
   exports.nodeListToArr(xml.attributes || [])
     .filter(attr => attr.name.startsWith(DATA_CONFIG_SEARCHSTRING))
     .forEach(attr => {
-      let key = attr.name.replace(DATA_CONFIG_SEARCHSTRING, "")
+      let key = attr.name.replace(DATA_CONFIG_SEARCHSTRING, '')
       conf[key] = toBool(attr.value)
       xml.removeAttribute(attr.name)
     })
@@ -28,8 +28,8 @@ exports.extractConfig = function (xml) {
 }
 
 const toBool = function (str) {
-  if (str === "true") return true
-  if (str === "false") return false
+  if (str === 'true') return true
+  if (str === 'false') return false
   return str
 }
 
@@ -44,7 +44,7 @@ exports.generateTestcaseName = function (xml) {
     return `converts ${id.toLowerCase()}`.trim()
   } catch (ex) {
   }
-  return "converts"
+  return 'converts'
 }
 
 /**
@@ -95,14 +95,14 @@ exports.readFile = function (path, options) {
  * @returns {Document|Element}
  */
 exports.strToXML = function (str) {
-  return parser.parseFromString(str, "text/xml")
+  return parser.parseFromString(str, 'text/xml')
 }
 
 /**
  * @param {...Document|...Element} documents
  * @yields {Element[]}
  */
-exports.walkChildNodePairs = function* (...documents) {
+exports.walkChildNodePairs = function * (...documents) {
   const XMLs = documents.map(d => [exports.strToXML(d)])
   for (let item of exports.zip(...XMLs)) {
     let childNodes = item.map(e => exports.nodeListToArr(e.childNodes))
@@ -118,7 +118,7 @@ exports.walkChildNodePairs = function* (...documents) {
  * @param {string|Array} [opts.prioritise]
  * @param {string|Array} [opts.prioritize]
  */
-exports.walkFixtures = function* (dir, opts = {}) {
+exports.walkFixtures = function * (dir, opts = {}) {
   opts.prioritise = opts.prioritise || opts.prioritize || []
   dir = path.resolve(__dirname, dir)
 
@@ -129,9 +129,9 @@ exports.walkFixtures = function* (dir, opts = {}) {
     if (!data[parentDirname]) data[parentDirname] = []
 
     let filename = path.basename(filepath)
-    opts.prioritise.indexOf(filename) !== 0 ?
-      data[parentDirname].push(filepath) :
-      data[parentDirname].unshift(filepath)
+    opts.prioritise.indexOf(filename) !== 0
+      ? data[parentDirname].push(filepath)
+      : data[parentDirname].unshift(filepath)
   }
 
   for (let name of Object.keys(data)) {

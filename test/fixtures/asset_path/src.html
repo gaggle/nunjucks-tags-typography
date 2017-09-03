@@ -1,0 +1,18 @@
+<div>
+  {% asset_path file %}
+</div>
+<div id="Rooted" data-config-root="foo/">
+  {% asset_path file %}
+</div>
+<div id="Asset function replaces slug" data-config-asset_path="() => 'foo/bar'">
+  {% asset_path img/file %}
+</div>
+<div id="Rooted is applied on top of asset function" data-config-root="foo/" data-config-asset_path="() => 'bar'">
+  {% asset_path file %}
+</div>
+<div id="Empty">
+  {% asset_path %}
+</div>
+<div id="Empty if asset function returns undefined" data-config-asset_path="() => undefined">
+  {% asset_path file %}
+</div>

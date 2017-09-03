@@ -14,4 +14,6 @@ ratings:
   paths:
   - "**.js"
 exclude_paths:
-- test/
+- .*
+- coverage/
+- node_modules/

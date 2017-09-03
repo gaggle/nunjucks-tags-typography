@@ -5,7 +5,8 @@
   "scripts": {
     "test": "npm run _test && nyc report --reporter=html",
     "test:ci": "npm run _test && nyc report --reporter=lcov > coverage.lcov && codecov",
-    "lint": "standard --fix",
+    "lint:fix": "standard --fix",
+    "lint:code": "codeclimate analyze",
     "_test": "standard && nyc --all mocha"
   },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",

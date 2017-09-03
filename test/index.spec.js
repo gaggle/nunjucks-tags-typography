@@ -20,12 +20,12 @@ describe('nunjucks-tags-typography', function () {
   })
 
   for (let [name, ...filePaths] of helpers.walkFixtures('./fixtures', {prioritise: ['expected.html']})) {
-    describe(name, function () {
+    describe(name, function () {  // eslint-disable-line no-loop-func
       const content = filePaths.map(fp => fs.readFileSync(fp).toString())
       for (let [expected, src] of helpers.walkChildNodePairs(...content)) {
         if (!src || src.toString() === '\n') continue
 
-        it(helpers.generateTestcaseName(src), function () {
+        it(helpers.generateTestcaseName(src), function () {  // eslint-disable-line no-loop-func
           let conf = helpers.extractConfig(src)
           tags(nunjucks, conf)
           return nunjucks.render(src.toString())

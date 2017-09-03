@@ -34,15 +34,13 @@ const toBool = function (str) {
 }
 
 /**
- *
  * @param {Element} xml
  * @returns {string}
  */
 exports.generateTestcaseName = function (xml) {
-  try {
+  if (xml.hasAttribute && xml.hasAttribute('id')) {
     let id = xml.getAttribute('id')
     return `converts ${id.toLowerCase()}`.trim()
-  } catch (ex) {
   }
   return 'converts'
 }
@@ -129,14 +127,21 @@ exports.walkFixtures = function * (dir, opts = {}) {
     if (!data[parentDirname]) data[parentDirname] = []
 
     let filename = path.basename(filepath)
-    opts.prioritise.indexOf(filename) !== 0
-      ? data[parentDirname].push(filepath)
-      : data[parentDirname].unshift(filepath)
+
+    if (contains(filename, opts.prioritise)) {
+      data[parentDirname].unshift(filepath)
+    } else {
+      data[parentDirname].push(filepath)
+    }
   }
 
   for (let name of Object.keys(data)) {
     yield [name, ...data[name]]
   }
+}
+
+const contains = function (needle, haystack) {
+  return haystack.indexOf(needle) !== -1
 }
 
 /**

@@ -78,13 +78,13 @@ describe('test.helpers', function () {
     })
 
     it('exposes function to compare alike xml objects', function () {
-      const module = require('assert')
+      const module = require('assert')  // eslint-disable-line global-require
       helpers.initCustomAsserts(module)
       module.xmlEqual(element(), element())
     })
 
     it('exposes function that asserts on disalike objects', function () {
-      const module = require('assert')
+      const module = require('assert')  // eslint-disable-line global-require
       helpers.initCustomAsserts(module)
       const fn = () => module.xmlEqual(element('foo="bar"'), element())
       assert.throws(fn, Error, 'xmlEqual should throw')
@@ -125,7 +125,7 @@ describe('test.helpers', function () {
   describe('#walkChildNodePairs', function () {
     it('returns generator of arrays', function () {
       const paired = helpers.walkChildNodePairs('<div/>', '<div/>')
-      let actual = next(paired)
+      let actual = nextVal(paired)
       assert(Array.isArray(actual), 'Elements of generator must be arrays')
     })
 
@@ -135,10 +135,10 @@ describe('test.helpers', function () {
       const paired = helpers.walkChildNodePairs(letters, numbers)
 
       assert.deepEqual(
-        next(paired).map(e => e.toString()),
+        nextVal(paired).map(e => e.toString()),
         ['<div id="a"/>', '<div id="1"/>'])
       assert.deepEqual(
-        next(paired).map(e => e.toString()),
+        nextVal(paired).map(e => e.toString()),
         ['<div id="b"/>', '<div id="2"/>'])
     })
   })
@@ -148,16 +148,16 @@ describe('test.helpers', function () {
     afterEach(() => mock.restore())
 
     it('returns generator of arrays', function () {
-      assert(Array.isArray(next(callWalkFixtures())))
+      assert(Array.isArray(nextVal(callWalkFixtures())))
     })
 
     it('has data with folder name first', function () {
-      let result = next(callWalkFixtures())
+      let result = nextVal(callWalkFixtures())
       assert.deepEqual(result.shift(), 'dir')
     })
 
     it('has data with remaining content being file paths', function () {
-      let result = next(callWalkFixtures())
+      let result = nextVal(callWalkFixtures())
       result.shift() // Get rid of first element
       assert.deepEqual(result, [
         path.join(__dirname, 'dir', 'first'),
@@ -165,31 +165,16 @@ describe('test.helpers', function () {
       ])
     })
 
-    it('allows prioritising of a filename', function () {
-      const result = callWalkFixtures({prioritise: 'second'})
-      assert.deepEqual(next(result), [
-        'dir',
-        path.join(__dirname, 'dir', 'second'),
-        path.join(__dirname, 'dir', 'first')
-      ])
+    it('allows prioritising of filenames', function () {
+      assertSecondIsBeforeFirst(callWalkFixtures({prioritise: 'second'}))
     })
 
     it('allows prioritising of multiple filenames', function () {
-      const result = callWalkFixtures({prioritise: ['second']})
-      assert.deepEqual(next(result), [
-        'dir',
-        path.join(__dirname, 'dir', 'second'),
-        path.join(__dirname, 'dir', 'first')
-      ])
+      assertSecondIsBeforeFirst(callWalkFixtures({prioritise: ['second']}))
     })
 
     it('allows use of American prioritize', function () {
-      const result = callWalkFixtures({prioritize: 'second'})
-      assert.deepEqual(next(result), [
-        'dir',
-        path.join(__dirname, 'dir', 'second'),
-        path.join(__dirname, 'dir', 'first')
-      ])
+      assertSecondIsBeforeFirst(callWalkFixtures({prioritize: 'second'}))
     })
 
     const mockDir = function (config) {
@@ -200,6 +185,14 @@ describe('test.helpers', function () {
 
     const callWalkFixtures = function (opts = undefined) {
       return helpers.walkFixtures(path.join(__dirname, 'dir'), opts)
+    }
+
+    const assertSecondIsBeforeFirst = function (result) {
+      assert.deepEqual(nextVal(result), [
+        'dir',
+        path.join(__dirname, 'dir', 'second'),
+        path.join(__dirname, 'dir', 'first')
+      ])
     }
   })
 
@@ -236,6 +229,6 @@ const element = function (...attrs) {
   return document.childNodes[0]
 }
 
-const next = function (iterable) {
+const nextVal = function (iterable) {
   return iterable.next().value
 }

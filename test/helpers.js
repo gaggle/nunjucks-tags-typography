@@ -21,15 +21,18 @@ exports.extractConfig = function (xml) {
     .filter(attr => attr.name.startsWith(DATA_CONFIG_SEARCHSTRING))
     .forEach(attr => {
       let key = attr.name.replace(DATA_CONFIG_SEARCHSTRING, '')
-      conf[key] = toBool(attr.value)
+      conf[key] = toValue(attr.value)
       xml.removeAttribute(attr.name)
     })
   return conf
 }
 
-const toBool = function (str) {
+const toValue = function (str) {
   if (str === 'true') return true
   if (str === 'false') return false
+  if (str.indexOf('=>') !== -1) {
+    return eval(str).bind(this)  // eslint-disable-line no-eval
+  }
   return str
 }
 

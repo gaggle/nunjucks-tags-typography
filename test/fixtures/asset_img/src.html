@@ -1,0 +1,18 @@
+<div>
+  {% asset_img file.png %}
+</div>
+<div id="Titled">
+  {% asset_img file.png "Title" %}
+</div>
+<div id="Rooted" data-config-root="img">
+  {% asset_img img/file.png %}
+</div>
+<div id="AssetFn" data-config-asset="() => 'foo/bar.png'">
+  {% asset_img img/file.png %}
+</div>
+<div id="AssetFn returning undefined" data-config-asset="() => undefined">
+  {% asset_img img/file.png %}
+</div>
+<div id="Empty">
+  {% asset_img %}
+</div>

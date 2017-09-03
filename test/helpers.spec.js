@@ -43,6 +43,11 @@ describe('test.helpers', function () {
         {id: 'foo', 'data-custom': 'bar'}
       )
     })
+
+    it('converts arrow-function string to real function', function () {
+      const result = helpers.extractConfig(element('data-config-foo="() => 1"'))
+      assert.equal(result.foo(), 1)
+    })
   })
 
   describe('#generateTestcaseName', function () {

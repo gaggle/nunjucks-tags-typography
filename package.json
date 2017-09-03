@@ -5,7 +5,8 @@
   "scripts": {
     "test": "npm run _test && nyc report --reporter=html",
     "test:ci": "npm run _test && nyc report --reporter=lcov > coverage.lcov && codecov",
-    "_test": "nyc --all mocha"
+    "lint": "standard --fix",
+    "_test": "standard && nyc --all mocha"
   },
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "nunjucks-tags": "git+https://github.com/gaggle/nunjucks-tags.git",
     "nyc": "^11.1.0",
     "recursive-readdir-sync": "^1.0.6",
+    "standard": "^10.0.3",
     "xmldom": "^0.1.27"
   },
   "nyc": {

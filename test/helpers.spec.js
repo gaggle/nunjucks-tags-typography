@@ -48,6 +48,11 @@ describe('test.helpers', function () {
       const result = helpers.extractConfig(element('data-config-foo="() => 1"'))
       assert.equal(result.foo(), 1)
     })
+
+    it('converts object string to real object', function () {
+      const result = helpers.extractConfig(element(`data-config-foo='{"ham":"spam"}'`))
+      assert.deepEqual(result.foo, {ham: 'spam'})
+    })
   })
 
   describe('#generateTestcaseName', function () {

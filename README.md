@@ -1,9 +1,10 @@
-[![Build Status](https://travis-ci.org/gaggle/nunjucks-tags-typography.svg?branch=master)](https://travis-ci.org/gaggle/nunjucks-tags-typography)
-[![codecov](https://codecov.io/gh/gaggle/nunjucks-tags-typography/branch/master/graph/badge.svg)](https://codecov.io/gh/gaggle/nunjucks-tags-typography)
-[![Known Vulnerabilities](https://snyk.io/test/github/gaggle/nunjucks-tags-typography/badge.svg)](https://snyk.io/test/github/gaggle/nunjucks-tags-typography)
-[![Code Climate GPA](https://codeclimate.com/github/gaggle/nunjucks-tags-typography/badges/gpa.svg)](https://codeclimate.com/github/gaggle/nunjucks-tags-typography)
-
 # Nunjucks Tags Typography
+[![Build Status](https://travis-ci.org/gaggle/nunjucks-tags-typography.svg?branch=master)](https://travis-ci.org/gaggle/nunjucks-tags-typography)
+[![Code Climate GPA](https://codeclimate.com/github/gaggle/nunjucks-tags-typography/badges/gpa.svg)](https://codeclimate.com/github/gaggle/nunjucks-tags-typography)
+[![Code Coverage](https://codecov.io/gh/gaggle/nunjucks-tags-typography/branch/master/graph/badge.svg)](https://codecov.io/gh/gaggle/nunjucks-tags-typography)
+[![Known Vulnerabilities](https://snyk.io/test/github/gaggle/nunjucks-tags-typography/badge.svg)](https://snyk.io/test/github/gaggle/nunjucks-tags-typography)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
 Collection of custom tags for [Nunjucks] 
 suited for various typographical needs.
 

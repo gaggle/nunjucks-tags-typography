@@ -7,15 +7,15 @@
 <div id="Rooted" data-config-root="img/">
   {% asset_img file.png %}
 </div>
-<div id="Asset function replaces slug" data-config-asset="() => 'foo/bar.png'">
+<div id="Asset function replaces slug" data-config-asset_img="() => 'foo/bar.png'">
   {% asset_img file.png %}
 </div>
-<div id="Rooted is applied on top of asset function" data-config-root="img/" data-config-asset="() => 'foo.png'">
+<div id="Rooted is applied on top of asset function" data-config-root="img/" data-config-asset_img="() => 'foo.png'">
   {% asset_img file.png %}
 </div>
 <div id="Empty">
   {% asset_img %}
 </div>
-<div id="Empty if asset function returns undefined" data-config-asset="() => undefined">
+<div id="Empty if asset function returns undefined" data-config-asset_img="() => undefined">
   {% asset_img file.png %}
 </div>

@@ -81,10 +81,11 @@ describe('test.helpers', function () {
   describe('#initCustomAsserts', function () {
     beforeEach(() => delete require.cache['assert'])
 
-    it('modifies assert to include xmlEqual', function () {
+    it('modifies assert to include custom asserters', function () {
       let obj = {}
       helpers.initCustomAsserts(obj)
       assert(Object.keys(obj).indexOf('xmlEqual') !== -1)
+      assert(Object.keys(obj).indexOf('regexMatches') !== -1)
     })
 
     it('exposes function to compare alike xml objects', function () {
@@ -98,6 +99,19 @@ describe('test.helpers', function () {
       helpers.initCustomAsserts(module)
       const fn = () => module.xmlEqual(element('foo="bar"'), element())
       assert.throws(fn, Error, 'xmlEqual should throw')
+    })
+
+    it('exposes function to test regex', function () {
+      const module = require('assert')  // eslint-disable-line global-require
+      helpers.initCustomAsserts(module)
+      module.regexMatches(/^foo/, 'foobar')
+    })
+
+    it('exposes function that asserts on regex mismatch', function () {
+      const module = require('assert')  // eslint-disable-line global-require
+      helpers.initCustomAsserts(module)
+      const fn = () => module.regexMatches(/^foo/, 'bar')
+      assert.throws(fn, Error, 'regexMatches should throw')
     })
   })
 

@@ -67,6 +67,26 @@ Actual document:
 ${actual}`
     assert(comp.getResult(), message)
   }
+
+  assert.regexMatches = function (regex, str) {
+    let typemsg = `'${regex}' is not a RegEx
+
+Expected type:
+RegExp
+
+Actual type:
+${typeof regex}`
+    assert(regex instanceof RegExp, typemsg)
+
+    let matchmsg = `Regex does not match
+
+Regex:
+${regex}
+
+String:
+${str}`
+    assert(regex.test(str), matchmsg)
+  }
 }
 
 /**

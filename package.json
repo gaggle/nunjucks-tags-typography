@@ -20,6 +20,7 @@
   "devDependencies": {
     "codecov": "^2.3.0",
     "dom-compare": "^0.3.1",
+    "lodash.isstring": "^4.0.1",
     "mocha": "^3.5.0",
     "mock-fs": "^4.4.1",
     "nunjucks-tags": "git+https://github.com/gaggle/nunjucks-tags.git",

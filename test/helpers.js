@@ -1,6 +1,9 @@
+/* global describe, it */
 'use strict'
+const assert = require('assert')
 const compare = require('dom-compare').compare
 const fs = require('fs')
+const isStr = require('lodash.isstring')
 const path = require('path')
 const recursiveReaddirSync = require('recursive-readdir-sync')
 const reporter = require('dom-compare').GroupingReporter
@@ -9,6 +12,66 @@ const xmldom = require('xmldom')
 const parser = new xmldom.DOMParser()
 
 let DATA_CONFIG_SEARCHSTRING = 'data-config-'
+
+/**
+ * @param topic
+ * @param module
+ * @param data
+ */
+exports.createRegexTestSuite = function (topic, module, data) {
+  exports.initCustomAsserts(assert)
+  describe(topic, function () {
+    Object.keys(data).forEach(function (key) {
+      if (!module.hasOwnProperty('__get__')) throw new Error(`Module must support '__get__', e.g. use rewire to require the module'`)
+      let value = data[key]
+
+      if (!value || (!value.match && !value.fail)) value = {match: value}
+      if (isStr(value)) value = {match: [value]}
+      if (isStr(value.match)) value.match = [value.match]
+      if (value.match && !value.match.forEach) value.match = [value.match]
+      if (value.fail && !value.fail.forEach) value.fail = [value.fail]
+
+      describe(key, function () {
+        let matches = value.match || []
+        matches.forEach(function (matchElement) {
+          let str, expectedElements
+
+          let regex
+          try {
+            regex = module.__get__(key)
+          } catch (ex) {
+            throw new ReferenceError(`'${key}' not found in module for regex test suite '${topic}'`)
+          }
+
+          if (matchElement.hasOwnProperty('str') && matchElement.hasOwnProperty('elements')) {
+            str = matchElement.str
+            expectedElements = matchElement.elements
+          } else {
+            str = matchElement
+          }
+
+          it(`matches '${str}'`, function () {
+            assert.regexMatches(regex, str)
+          })
+
+          if (expectedElements) {
+            it(`identifies elements of '${str}'`, function () {
+              let actualElements = str.match(regex)
+              assert.deepEqual(Array.from(actualElements), expectedElements)
+            })
+          }
+        })
+
+        let fails = value.fail || []
+        fails.forEach(function (str) {
+          it(`does not matches '${str}'`, function () {
+            assert.notRegexMatches(module.__get__(key), str)
+          })
+        })
+      })
+    })
+  })
+}
 
 /**
  *
@@ -27,18 +90,6 @@ exports.extractConfig = function (xml) {
   return conf
 }
 
-const toValue = function (str) {
-  if (str === 'true') return true
-  if (str === 'false') return false
-  if (str.indexOf('=>') !== -1) {
-    return eval(str).bind(this)  // eslint-disable-line no-eval
-  }
-  if (str.startsWith('{') && str.endsWith('}')) {
-    return JSON.parse(str)
-  }
-  return str
-}
-
 /**
  * @param {Element} xml
  * @returns {string}
@@ -55,9 +106,10 @@ exports.generateTestcaseName = function (xml) {
  * @param {Module} assert
  */
 exports.initCustomAsserts = function (assert) {
-  assert.xmlEqual = function (expected, actual) {
-    let comp = compare(expected, actual, {stripSpaces: true})
-    let message = `Documents are not equal
+  if (!assert.xmlEqual) {
+    assert.xmlEqual = function (expected, actual) {
+      let comp = compare(expected, actual, {stripSpaces: true})
+      let message = `Documents are not equal
 ${reporter.report(comp)}
 
 Expected document:
@@ -65,27 +117,52 @@ ${expected}
 
 Actual document:
 ${actual}`
-    assert(comp.getResult(), message)
+      assert(comp.getResult(), message)
+    }
   }
 
-  assert.regexMatches = function (regex, str) {
-    let typemsg = `'${regex}' is not a RegEx
+  if (!assert.regexMatches) {
+    assert.regexMatches = function (regex, str) {
+      let typemsg = `'${regex}' is not a RegEx
 
 Expected type:
 RegExp
 
 Actual type:
 ${typeof regex}`
-    assert(regex instanceof RegExp, typemsg)
+      assert(regex instanceof RegExp, typemsg)
 
-    let matchmsg = `Regex does not match
+      let matchmsg = `Regex does not match
 
 Regex:
 ${regex}
 
 String:
 ${str}`
-    assert(regex.test(str), matchmsg)
+      assert(regex.test(str), matchmsg)
+    }
+  }
+
+  if (!assert.notRegexMatches) {
+    assert.notRegexMatches = function (regex, str) {
+      let typemsg = `'${regex}' is not a RegEx
+
+Expected type:
+RegExp
+
+Actual type:
+${typeof regex}`
+      assert(regex instanceof RegExp, typemsg)
+
+      let matchmsg = `Regex does match
+
+Regex:
+${regex}
+
+String:
+${str}`
+      assert(!regex.test(str), matchmsg)
+    }
   }
 }
 
@@ -166,14 +243,26 @@ exports.walkFixtures = function * (dir, opts = {}) {
   }
 }
 
-const contains = function (needle, haystack) {
-  return haystack.indexOf(needle) !== -1
-}
-
 /**
  * @param {...} rows
  * @returns {Array}
  */
 exports.zip = function (...rows) {
   return rows[0].map((_, i) => rows.map(row => row[i]))
+}
+
+const contains = function (needle, haystack) {
+  return haystack.indexOf(needle) !== -1
+}
+
+const toValue = function (str) {
+  if (str === 'true') return true
+  if (str === 'false') return false
+  if (str.indexOf('=>') !== -1) {
+    return eval(str).bind(this)  // eslint-disable-line no-eval
+  }
+  if (str.startsWith('{') && str.endsWith('}')) {
+    return JSON.parse(str)
+  }
+  return str
 }

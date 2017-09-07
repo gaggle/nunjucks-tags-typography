@@ -106,6 +106,7 @@ exports.extractTestcaseData = function (xml) {
   if (xml.hasAttribute) {
     id = xml.getAttribute('id').toLowerCase()
     only = xml.getAttribute('data-only')
+    xml.removeAttribute('data-only')
   }
 
   let name = 'converts '

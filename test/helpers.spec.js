@@ -183,9 +183,15 @@ describe('test.helpers', function () {
 
     it('identifies data-only attribute', function () {
       assert.deepEqual(
-        helpers.extractTestcaseData(element('data-only=true')),
+        helpers.extractTestcaseData(element('data-only="data-only"')),
         {name: 'converts', only: true}
       )
+    })
+
+    it('removes data-only attribute', function () {
+      let el = element('data-only="data-only"')
+      helpers.extractTestcaseData(el)
+      assert.equal(el.getAttribute('data-only'), '')
     })
   })
 

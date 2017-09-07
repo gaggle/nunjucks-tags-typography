@@ -61,7 +61,7 @@ exports.createRegexTestSuite = function (topic, module, data) {
 
           if (expectedElements) {
             it(`identifies elements of '${str}'`, function () {
-              let actualElements = str.match(regex)
+              let actualElements = exports.getMatches(str, regex)
               assert.deepEqual(Array.from(actualElements), expectedElements)
             })
           }
@@ -119,6 +119,25 @@ exports.extractTestcaseData = function (xml) {
   return {name: name.trim(), only: !!only, skip: !!skip}
 }
 
+exports.getMatches = function (str, regex) {
+  const res = []
+  const ind = regex.lastIndex
+  let m
+  try {
+    if (regex.global) {
+      while (m = regex.exec(str)) {  // eslint-disable-line no-cond-assign
+        res.push(m[1] || m[0])
+      }
+    } else {
+      m = regex.exec(str)
+      Array.prototype.push.apply(res, m)
+    }
+  } finally {
+    regex.lastIndex = ind
+  }
+  return res
+}
+
 /**
  * @param {Module} assert
  */
@@ -156,7 +175,12 @@ ${regex}
 
 String:
 ${str}`
-      assert(regex.test(str), matchmsg)
+      const ind = regex.lastIndex
+      try {
+        assert(regex.test(str), matchmsg)
+      } finally {
+        regex.lastIndex = ind
+      }
     }
   }
 

@@ -12,6 +12,8 @@
   "author": "Jon Lauridsen <mail@jonlauridsen.com>",
   "license": "ISC",
   "dependencies": {
+    "hexo-util": "^0.6.1",
+    "strip-indent": "^2.0.0",
     "titlecase": "^1.1.2"
   },
   "peerDependencies": {

@@ -217,6 +217,19 @@ describe('test.helpers', function () {
       const fn = () => module.regexMatches(/^foo/, 'bar')
       assert.throws(fn, Error, 'regexMatches should throw')
     })
+
+    it('exposes negative function to test regex', function () {
+      const module = require('assert')  // eslint-disable-line global-require
+      helpers.initCustomAsserts(module)
+      module.notRegexMatches(/^foo/, 'bar')
+    })
+
+    it('exposes function that asserts on regex match', function () {
+      const module = require('assert')  // eslint-disable-line global-require
+      helpers.initCustomAsserts(module)
+      const fn = () => module.regexMatches(/^foo/, 'bar')
+      assert.throws(fn, Error, 'notRegexMatches should find mismatches')
+    })
   })
 
   describe('#nodeListToArr', function () {

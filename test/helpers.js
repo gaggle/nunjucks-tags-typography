@@ -90,18 +90,6 @@ exports.extractConfig = function (xml) {
   return conf
 }
 
-const toValue = function (str) {
-  if (str === 'true') return true
-  if (str === 'false') return false
-  if (str.indexOf('=>') !== -1) {
-    return eval(str).bind(this)  // eslint-disable-line no-eval
-  }
-  if (str.startsWith('{') && str.endsWith('}')) {
-    return JSON.parse(str)
-  }
-  return str
-}
-
 /**
  * @param {Element} xml
  * @returns {string}
@@ -118,9 +106,10 @@ exports.generateTestcaseName = function (xml) {
  * @param {Module} assert
  */
 exports.initCustomAsserts = function (assert) {
-  assert.xmlEqual = function (expected, actual) {
-    let comp = compare(expected, actual, {stripSpaces: true})
-    let message = `Documents are not equal
+  if (!assert.xmlEqual) {
+    assert.xmlEqual = function (expected, actual) {
+      let comp = compare(expected, actual, {stripSpaces: true})
+      let message = `Documents are not equal
 ${reporter.report(comp)}
 
 Expected document:
@@ -128,27 +117,52 @@ ${expected}
 
 Actual document:
 ${actual}`
-    assert(comp.getResult(), message)
+      assert(comp.getResult(), message)
+    }
   }
 
-  assert.regexMatches = function (regex, str) {
-    let typemsg = `'${regex}' is not a RegEx
+  if (!assert.regexMatches) {
+    assert.regexMatches = function (regex, str) {
+      let typemsg = `'${regex}' is not a RegEx
 
 Expected type:
 RegExp
 
 Actual type:
 ${typeof regex}`
-    assert(regex instanceof RegExp, typemsg)
+      assert(regex instanceof RegExp, typemsg)
 
-    let matchmsg = `Regex does not match
+      let matchmsg = `Regex does not match
 
 Regex:
 ${regex}
 
 String:
 ${str}`
-    assert(regex.test(str), matchmsg)
+      assert(regex.test(str), matchmsg)
+    }
+  }
+
+  if (!assert.notRegexMatches) {
+    assert.notRegexMatches = function (regex, str) {
+      let typemsg = `'${regex}' is not a RegEx
+
+Expected type:
+RegExp
+
+Actual type:
+${typeof regex}`
+      assert(regex instanceof RegExp, typemsg)
+
+      let matchmsg = `Regex does match
+
+Regex:
+${regex}
+
+String:
+${str}`
+      assert(!regex.test(str), matchmsg)
+    }
   }
 }
 
@@ -229,14 +243,26 @@ exports.walkFixtures = function * (dir, opts = {}) {
   }
 }
 
-const contains = function (needle, haystack) {
-  return haystack.indexOf(needle) !== -1
-}
-
 /**
  * @param {...} rows
  * @returns {Array}
  */
 exports.zip = function (...rows) {
   return rows[0].map((_, i) => rows.map(row => row[i]))
+}
+
+const contains = function (needle, haystack) {
+  return haystack.indexOf(needle) !== -1
+}
+
+const toValue = function (str) {
+  if (str === 'true') return true
+  if (str === 'false') return false
+  if (str.indexOf('=>') !== -1) {
+    return eval(str).bind(this)  // eslint-disable-line no-eval
+  }
+  if (str.startsWith('{') && str.endsWith('}')) {
+    return JSON.parse(str)
+  }
+  return str
 }

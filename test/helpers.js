@@ -14,22 +14,27 @@ const parser = new xmldom.DOMParser()
 let DATA_CONFIG_SEARCHSTRING = 'data-config-'
 
 /**
- * @param topic
- * @param module
- * @param data
+ * @param {str} topic Name of top-level describe block
+ * @param {Object} module Rewired module
+ * @param {Object.__get__} module.__get__
+ * @param {str|array|Object} data
  */
 exports.createRegexTestSuite = function (topic, module, data) {
+  const normaliseValue = function (value) {
+    if (!value || (!value.match && !value.fail)) value = {match: value}
+    if (isStr(value)) value = {match: [value]}
+    if (isStr(value.match)) value.match = [value.match]
+    if (value.match && !value.match.forEach) value.match = [value.match]
+    if (value.fail && !value.fail.forEach) value.fail = [value.fail]
+    return value
+  }
+
   exports.initCustomAsserts(assert)
+
   describe(topic, function () {
     Object.keys(data).forEach(function (key) {
       if (!module.hasOwnProperty('__get__')) throw new Error(`Module must support '__get__', e.g. use rewire to require the module'`)
-      let value = data[key]
-
-      if (!value || (!value.match && !value.fail)) value = {match: value}
-      if (isStr(value)) value = {match: [value]}
-      if (isStr(value.match)) value.match = [value.match]
-      if (value.match && !value.match.forEach) value.match = [value.match]
-      if (value.fail && !value.fail.forEach) value.fail = [value.fail]
+      let value = normaliseValue(data[key])
 
       describe(key, function () {
         let matches = value.match || []

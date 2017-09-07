@@ -159,25 +159,32 @@ describe('test.helpers', function () {
     })
   })
 
-  describe('#generateTestcaseName', function () {
+  describe('#extractTestcaseData', function () {
     it('includes id in generated name', function () {
       assert.deepEqual(
-        helpers.generateTestcaseName(element('id="foo"')),
-        'converts foo'
+        helpers.extractTestcaseData(element('id="foo"')),
+        {name: 'converts foo', only: false}
       )
     })
 
     it('returns default if id is missing', function () {
       assert.deepEqual(
-        helpers.generateTestcaseName(element()),
-        'converts'
+        helpers.extractTestcaseData(element()),
+        {name: 'converts', only: false}
       )
     })
 
     it('returns default for attributes-less object', function () {
       assert.deepEqual(
-        helpers.generateTestcaseName({}),
-        'converts'
+        helpers.extractTestcaseData({}),
+        {name: 'converts', only: false}
+      )
+    })
+
+    it('identifies data-only attribute', function () {
+      assert.deepEqual(
+        helpers.extractTestcaseData(element('data-only=true')),
+        {name: 'converts', only: true}
       )
     })
   })

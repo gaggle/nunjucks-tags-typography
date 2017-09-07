@@ -97,14 +97,20 @@ exports.extractConfig = function (xml) {
 
 /**
  * @param {Element} xml
- * @returns {string}
+ * @returns {Object}
  */
-exports.generateTestcaseName = function (xml) {
-  if (xml.hasAttribute && xml.hasAttribute('id')) {
-    let id = xml.getAttribute('id')
-    return `converts ${id.toLowerCase()}`.trim()
+exports.extractTestcaseData = function (xml) {
+  let id
+  let only
+
+  if (xml.hasAttribute) {
+    id = xml.getAttribute('id').toLowerCase()
+    only = xml.getAttribute('data-only')
   }
-  return 'converts'
+
+  let name = 'converts '
+  if (id) name += id
+  return {name: name.trim(), only: !!only}
 }
 
 /**

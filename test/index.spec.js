@@ -10,6 +10,14 @@ const tags = require('..')
 helpers.initCustomAsserts(assert)
 
 describe('nunjucks-tags-typography', function () {
+  const it_ = function (name, tagAsOnly, fn) {
+    if (tagAsOnly) {
+      it.only(name, fn)
+    } else {
+      it(name, fn)
+    }
+  }
+
   let nunjucks
   beforeEach(() => {
     nunjucks = new Nunjucks()
@@ -25,7 +33,8 @@ describe('nunjucks-tags-typography', function () {
       for (let [expected, src] of helpers.walkChildNodePairs(...content)) {
         if (!src || src.toString() === '\n') continue
 
-        it(helpers.generateTestcaseName(src), function () {  // eslint-disable-line no-loop-func
+        let data = helpers.extractTestcaseData(src)
+        it_(data.name, data.only, function () {  // eslint-disable-line no-loop-func
           let conf = helpers.extractConfig(src)
           tags(nunjucks, conf)
           return nunjucks.render(src.toString())

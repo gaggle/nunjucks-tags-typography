@@ -20,6 +20,22 @@ describe('nunjucks-tags-typography', function () {
     }
   }
 
+  const createFailingXmlTestSuite = function (topic, data) {
+    describe(topic, function () {
+      Object.keys(data).forEach(function (key) {
+        let value = data[key]
+        it(`fails on ${key}`, function () {
+          tags(nunjucks)
+          return nunjucks.render(value)
+            .then(
+              () => { throw new Error('Should fail')},
+              (err) => assert(err)
+            )
+        })
+      })
+    })
+  }
+
   let nunjucks
   beforeEach(() => {
     nunjucks = new Nunjucks()
@@ -47,4 +63,10 @@ describe('nunjucks-tags-typography', function () {
       }
     })
   }
+
+  createFailingXmlTestSuite('gistit fails', {
+    'no params': '<div> {% gistit %} </div>',
+    'only account': '<div> {% gistit account %} </div>',
+    'missing path': '<div> {% gistit account repo %} </div>'
+  })
 })

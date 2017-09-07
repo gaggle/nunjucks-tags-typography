@@ -1,11 +1,115 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, before, after, beforeEach, afterEach */
 'use strict'
 const assert = require('assert')
 const mock = require('mock-fs')
 const path = require('path')
-const helpers = require('./helpers')
+const rewire = require('rewire')
+
+const helpers = rewire('./helpers')
 
 describe('test.helpers', function () {
+  describe('#createRegexTestSuite', function () {
+    const restores = []
+
+    before(function () {
+      restores.push(helpers.__set__('describe', (description, callback) => callback()))
+      restores.push(helpers.__set__('it', (expectation, callback) => callback()))
+    })
+
+    after(function () {
+      restores.forEach(restore => restore())
+      restores.length = 0
+    })
+
+    it('requires rewired module', function () {
+      const fn = () => helpers.createRegexTestSuite(
+        '',
+        rewire, // Not a rewired module
+        {foo: 'bar'}
+      )
+      assert.throws(fn)
+    })
+
+    it('requires module to have specified key', function () {
+      const fn = () => helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {foo: 'bar'}
+      )
+      assert.throws(fn)
+    })
+
+    it('allows use of undefined', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: undefined})
+    })
+
+    it('allows matching string', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: 'foo'})
+    })
+
+    it('allows matching array', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: ['foo']}
+      )
+    })
+
+    it('allows matching object with #match string property', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {match: 'foo'}}
+      )
+    })
+
+    it('allows matching object with #match array of strings', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {match: ['foo']}}
+      )
+    })
+
+    it('allows matching elements', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {match: {str: 'foo', elements: ['foo']}}}
+      )
+    })
+
+    it('allows matching multiple values with elements', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {match: [{str: 'foo', elements: ['foo']}]}}
+      )
+    })
+
+    it('allows non-matches as string', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {fail: 'bar'}}
+      )
+    })
+
+    it('allows non-matches as array', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchFoo: {fail: ['bar']}}
+      )
+    })
+  })
+
   describe('#extractConfig', function () {
     it('returns empty from attributes-less object', function () {
       const result = helpers.extractConfig({})

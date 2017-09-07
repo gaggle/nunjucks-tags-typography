@@ -1,6 +1,9 @@
+/* global describe, it */
 'use strict'
+const assert = require('assert')
 const compare = require('dom-compare').compare
 const fs = require('fs')
+const isStr = require('lodash.isstring')
 const path = require('path')
 const recursiveReaddirSync = require('recursive-readdir-sync')
 const reporter = require('dom-compare').GroupingReporter
@@ -9,6 +12,66 @@ const xmldom = require('xmldom')
 const parser = new xmldom.DOMParser()
 
 let DATA_CONFIG_SEARCHSTRING = 'data-config-'
+
+/**
+ * @param topic
+ * @param module
+ * @param data
+ */
+exports.createRegexTestSuite = function (topic, module, data) {
+  exports.initCustomAsserts(assert)
+  describe(topic, function () {
+    Object.keys(data).forEach(function (key) {
+      if (!module.hasOwnProperty('__get__')) throw new Error(`Module must support '__get__', e.g. use rewire to require the module'`)
+      let value = data[key]
+
+      if (!value || (!value.match && !value.fail)) value = {match: value}
+      if (isStr(value)) value = {match: [value]}
+      if (isStr(value.match)) value.match = [value.match]
+      if (value.match && !value.match.forEach) value.match = [value.match]
+      if (value.fail && !value.fail.forEach) value.fail = [value.fail]
+
+      describe(key, function () {
+        let matches = value.match || []
+        matches.forEach(function (matchElement) {
+          let str, expectedElements
+
+          let regex
+          try {
+            regex = module.__get__(key)
+          } catch (ex) {
+            throw new ReferenceError(`'${key}' not found in module for regex test suite '${topic}'`)
+          }
+
+          if (matchElement.hasOwnProperty('str') && matchElement.hasOwnProperty('elements')) {
+            str = matchElement.str
+            expectedElements = matchElement.elements
+          } else {
+            str = matchElement
+          }
+
+          it(`matches '${str}'`, function () {
+            assert.regexMatches(regex, str)
+          })
+
+          if (expectedElements) {
+            it(`identifies elements of '${str}'`, function () {
+              let actualElements = str.match(regex)
+              assert.deepEqual(Array.from(actualElements), expectedElements)
+            })
+          }
+        })
+
+        let fails = value.fail || []
+        fails.forEach(function (str) {
+          it(`does not matches '${str}'`, function () {
+            assert.notRegexMatches(module.__get__(key), str)
+          })
+        })
+      })
+    })
+  })
+}
 
 /**
  *

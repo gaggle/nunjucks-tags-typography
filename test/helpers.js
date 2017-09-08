@@ -102,16 +102,21 @@ exports.extractConfig = function (xml) {
 exports.extractTestcaseData = function (xml) {
   let id
   let only
+  let skip
 
   if (xml.hasAttribute) {
     id = xml.getAttribute('id').toLowerCase()
+
     only = xml.getAttribute('data-only')
     xml.removeAttribute('data-only')
+
+    skip = xml.getAttribute('data-skip')
+    xml.removeAttribute('data-skip')
   }
 
   let name = 'converts '
   if (id) name += id
-  return {name: name.trim(), only: !!only}
+  return {name: name.trim(), only: !!only, skip: !!skip}
 }
 
 /**

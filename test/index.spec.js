@@ -28,7 +28,7 @@ describe('nunjucks-tags-typography', function () {
           tags(nunjucks)
           return nunjucks.render(value)
             .then(
-              () => { throw new Error('Should fail')},
+              () => { throw new Error('Should fail') },
               (err) => assert(err)
             )
         })

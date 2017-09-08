@@ -85,6 +85,14 @@ describe('test.helpers', function () {
       )
     })
 
+    it('allows matching element groups', function () {
+      helpers.createRegexTestSuite(
+        '',
+        rewire('./regex'),
+        {rMatchAbCdEf: {match: {str: 'abcdef', elements: ['ab', 'cd', 'ef']}}}
+      )
+    })
+
     it('allows matching multiple values with elements', function () {
       helpers.createRegexTestSuite(
         '',
@@ -205,6 +213,18 @@ describe('test.helpers', function () {
       let el = element('data-skip="data-skip"')
       helpers.extractTestcaseData(el)
       assert.equal(el.getAttribute('data-skip'), '')
+    })
+  })
+
+  describe('#getMatches', function () {
+    it('matches all', function () {
+      let result = helpers.getMatches('ab cd', /ab|cd|ef/g)
+      assert.deepEqual(result, ['ab', 'cd'])
+    })
+
+    it('without /g matches one group', function () {
+      let result = helpers.getMatches('ab cd', /ab|cd|ef/)
+      assert.deepEqual(result, ['ab'])
     })
   })
 

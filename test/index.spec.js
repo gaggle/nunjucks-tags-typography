@@ -55,7 +55,7 @@ describe('nunjucks-tags-typography', function () {
         it_(data.name || name, data.only, data.skip, function () {  // eslint-disable-line no-loop-func
           let conf = helpers.extractConfig(src)
           tags(nunjucks, conf)
-          return nunjucks.render(src.toString())
+          return nunjucks.render(src.toString(), data)
             .then(helpers.strToXML)
             .then(e => e.childNodes[0]) // We need the element itself, not top-level document
             .then(actual => assert.xmlEqual(expected, actual))

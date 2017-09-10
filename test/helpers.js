@@ -302,6 +302,10 @@ const toValue = function (str) {
   if (str.indexOf('=>') !== -1) {
     return eval(str).bind(this)  // eslint-disable-line no-eval
   }
+  if (str.startsWith('function ')) {
+    str = `(${str})`
+    return eval(str)  // eslint-disable-line no-eval
+  }
   if (str.startsWith('{') && str.endsWith('}')) {
     return JSON.parse(str)
   }

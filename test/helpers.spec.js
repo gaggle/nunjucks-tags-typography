@@ -156,6 +156,11 @@ describe('test.helpers', function () {
       )
     })
 
+    it('converts function string to real function', function () {
+      const result = helpers.extractConfig(element('data-config-foo="function a() { return 1 }"'))
+      assert.equal(result.foo(), 1)
+    })
+
     it('converts arrow-function string to real function', function () {
       const result = helpers.extractConfig(element('data-config-foo="() => 1"'))
       assert.equal(result.foo(), 1)

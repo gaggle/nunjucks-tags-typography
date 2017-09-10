@@ -52,7 +52,7 @@ describe('nunjucks-tags-typography', function () {
         if (!src || src.toString() === '\n') continue
 
         let data = helpers.extractTestcaseData(src)
-        it_(data.name, data.only, data.skip, function () {  // eslint-disable-line no-loop-func
+        it_(data.name || name, data.only, data.skip, function () {  // eslint-disable-line no-loop-func
           let conf = helpers.extractConfig(src)
           tags(nunjucks, conf)
           return nunjucks.render(src.toString())

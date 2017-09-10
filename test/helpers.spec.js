@@ -176,28 +176,28 @@ describe('test.helpers', function () {
     it('includes id in generated name', function () {
       assert.deepEqual(
         helpers.extractTestcaseData(element('id="foo"')),
-        {name: 'converts foo', only: false, skip: false}
+        {name: 'foo', only: false, skip: false}
       )
     })
 
-    it('returns default if id is missing', function () {
+    it('returns empty if id is missing', function () {
       assert.deepEqual(
         helpers.extractTestcaseData(element()),
-        {name: 'converts', only: false, skip: false}
+        {name: '', only: false, skip: false}
       )
     })
 
-    it('returns default for attributes-less object', function () {
+    it('returns nothing for attributes-less object', function () {
       assert.deepEqual(
         helpers.extractTestcaseData({}),
-        {name: 'converts', only: false, skip: false}
+        {name: undefined, only: false, skip: false}
       )
     })
 
     it('identifies data-only attribute', function () {
       assert.deepEqual(
         helpers.extractTestcaseData(element('data-only="data-only"')),
-        {name: 'converts', only: true, skip: false}
+        {name: '', only: true, skip: false}
       )
     })
 
@@ -210,7 +210,7 @@ describe('test.helpers', function () {
     it('identifies data-skip attribute', function () {
       assert.deepEqual(
         helpers.extractTestcaseData(element('data-skip="data-skip"')),
-        {name: 'converts', only: false, skip: true}
+        {name: '', only: false, skip: true}
       )
     })
 

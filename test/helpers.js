@@ -114,9 +114,7 @@ exports.extractTestcaseData = function (xml) {
     xml.removeAttribute('data-skip')
   }
 
-  let name = 'converts '
-  if (id) name += id
-  return {name: name.trim(), only: !!only, skip: !!skip}
+  return {name: id, only: !!only, skip: !!skip}
 }
 
 exports.getMatches = function (str, regex) {

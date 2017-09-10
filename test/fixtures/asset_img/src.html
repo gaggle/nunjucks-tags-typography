@@ -19,3 +19,6 @@
 <div id="Empty if asset function returns undefined" data-config-asset_img="() => undefined">
   {% asset_img file.png %}
 </div>
+<div id="Callback bound to ctx" data-config-asset_img="function a() { return this.name }">
+  {% asset_img file.png %}
+</div>

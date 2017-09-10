@@ -16,6 +16,9 @@
 <div id="Empty if asset function returns undefined" data-config-asset_path="() => undefined">
   {% asset_path file %}
 </div>
+<div id="Callback is passed slug" data-config-asset_path="(p) => (p === 'file').toString()">
+  {% asset_path file %}
+</div>
 <div id="Callback bound to ctx" data-config-asset_path="function a() { return this.name }">
   {% asset_path file %}
 </div>

@@ -1,6 +1,9 @@
 <div>
   {% pullquote %}pullquote{% endpullquote %}
 </div>
-<div id="adds args as class">
-  {% pullquote foo %}{% endpullquote %}
+<div id="Adds args as classes">
+  {% pullquote foo bar %}{% endpullquote %}
+</div>
+<div id="Does not paragraph tags">
+  {% pullquote %}<img/>{% endpullquote %}
 </div>

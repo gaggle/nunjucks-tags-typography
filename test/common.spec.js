@@ -40,3 +40,18 @@ describe('extract', function () {
     assert.equal(arg, '')
   })
 })
+
+describe('paragraphWrap', function () {
+  it('wraps content in paragraph-tags', function () {
+    assert.equal(common.paragraphWrap('foo'), '<p>foo</p>')
+  })
+
+  it('ignores no content', function () {
+    assert.equal(common.paragraphWrap(''), '')
+    assert.equal(common.paragraphWrap(undefined), undefined)
+  })
+
+  it('ignores content that already starts with a tag', function () {
+    assert.equal(common.paragraphWrap('<img/>'), '<img/>')
+  })
+})

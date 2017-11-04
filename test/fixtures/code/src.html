@@ -72,3 +72,11 @@
 <div id="does not interpolate content">
   {% code %}{{ foo }}{% endcode %}
 </div>
+<div id="can autodetect language">
+  {% code auto_detect:true %}{"foo":"bar"}{% endcode %}
+</div>
+<div id="can autodetect language over multiple lines">
+  {% code auto_detect:true %}{
+  "foo":"bar"
+  }{% endcode %}
+</div>

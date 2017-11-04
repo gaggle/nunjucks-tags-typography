@@ -1,25 +1,12 @@
-<div>
-  <pre><code>
-    a
-  </code></pre>
-</div>
-<div id="enabled">
+<div id="basic">
   <figure class="highlight plain">
     <table>
       <tr>
         <td class="code">
-          <pre><div class="line">a</div></pre>
-        </td>
-      </tr>
-    </table>
-  </figure>
-</div>
-<div id="highlight enables regardless of global setting">
-  <figure class="highlight plain">
-    <table>
-      <tr>
-        <td class="code">
-          <pre><div class="line">a</div></pre>
+          <pre>
+            <span class="line">a</span><br/>
+            <span class="line">  b</span><br/>
+          </pre>
         </td>
       </tr>
     </table>
@@ -30,7 +17,7 @@
     <table>
       <tr>
         <td class="code">
-          <pre><div class="line">{}</div></pre>
+          <pre><span class="line">{}</span><br/></pre>
         </td>
       </tr>
     </table>
@@ -41,10 +28,10 @@
     <table>
       <tr>
         <td class="gutter">
-          <pre><div class="line">1</div></pre>
+          <pre><span class="line">1</span><br/></pre>
         </td>
         <td class="code">
-          <pre><div class="line">a</div></pre>
+          <pre><span class="line">a</span><br/></pre>
         </td>
       </tr>
     </table>
@@ -56,14 +43,14 @@
       <tr>
         <td class="gutter">
           <pre>
-            <div class="line">20</div>
-            <div class="line">21</div>
+            <span class="line">20</span><br/>
+            <span class="line">21</span><br/>
           </pre>
         </td>
         <td class="code">
           <pre>
-            <div class="line">a</div>
-            <div class="line">  b</div>
+            <span class="line">a</span><br/>
+            <span class="line">  b</span><br/>
           </pre>
         </td>
       </tr>
@@ -76,8 +63,8 @@
       <tr>
         <td class="code">
           <pre>
-            <div class="line marked">a</div>
-            <div class="line">  b</div>
+            <span class="line marked">a</span><br/>
+            <span class="line">  b</span><br/>
           </pre>
         </td>
       </tr>
@@ -90,8 +77,9 @@
       <tr>
         <td class="code">
           <pre>
-            <div class="line marked">a</div>
-            <div class="line marked">  b</div>
+            <span class="line marked">a</span><br/>
+            <span class="line">  b</span><br/>
+            <span class="line marked">    c</span><br/>
           </pre>
         </td>
       </tr>
@@ -104,8 +92,9 @@
       <tr>
         <td class="code">
           <pre>
-            <div class="line marked">a</div>
-            <div class="line marked">  b</div>
+            <span class="line marked">a</span><br/>
+            <span class="line marked">  b</span><br/>
+            <span class="line">    c</span><br/>
           </pre>
         </td>
       </tr>
@@ -118,8 +107,23 @@
       <tr>
         <td class="code">
           <pre>
-            <div class="line marked">a</div>
-            <div class="line marked">  b</div>
+            <span class="line marked">a</span><br/>
+            <span class="line marked">  b</span><br/>
+            <span class="line">    c</span><br/>
+          </pre>
+        </td>
+      </tr>
+    </table>
+  </figure>
+</div>
+<div id="replace tabs">
+  <figure class="highlight plain">
+    <table>
+      <tr>
+        <td class="code">
+          <pre>
+            <span class="line">a</span><br/>
+            <span class="line">||b</span><br/>
           </pre>
         </td>
       </tr>
@@ -128,13 +132,11 @@
 </div>
 <div id="caption url w. title">
   <figure class="highlight plain">
-    <figcaption>
-      <span>foo</span>
-    </figcaption>
+    <figcaption><span>foo</span></figcaption>
     <table>
       <tr>
         <td class="code">
-          <pre><div class="line">a</div></pre>
+          <pre><span class="line">a</span><br/></pre>
         </td>
       </tr>
     </table>
@@ -149,13 +151,13 @@
     <table>
       <tr>
         <td class="code">
-          <pre><div class="line">a</div></pre>
+          <pre><span class="line">a</span><br/></pre>
         </td>
       </tr>
     </table>
   </figure>
 </div>
-<div id="caption url w. title & link text">
+<div id="caption url w. title & link & link text">
   <figure class="highlight plain">
     <figcaption>
       <span>foo</span>
@@ -164,7 +166,60 @@
     <table>
       <tr>
         <td class="code">
-          <pre><div class="line">a</div></pre>
+          <pre><span class="line">a</span><br/></pre>
+        </td>
+      </tr>
+    </table>
+  </figure>
+</div>
+<div id="does not interpolate content">
+  <figure class="highlight plain">
+    <table>
+      <tr>
+        <td class="code">
+          <pre><span class="line">{{ foo }}</span><br/></pre>
+        </td>
+      </tr>
+    </table>
+  </figure>
+</div>
+<div id="can autodetect language">
+  <figure class="highlight json">
+    <table>
+      <tr>
+        <td class="code">
+          <pre>
+            <span class="line">
+              {
+              <span class="hljs-attr">"foo"</span>
+              :
+              <span class="hljs-string">"bar"</span>
+              }
+            </span>
+            <br/>
+          </pre>
+        </td>
+      </tr>
+    </table>
+  </figure>
+</div>
+<div id="can autodetect language over multiple lines">
+  <figure class="highlight json">
+    <table>
+      <tr>
+        <td class="code">
+          <pre>
+            <span class="line">{</span>
+            <br/>
+            <span class="line">
+              <span class="hljs-attr">"foo"</span>
+              :
+              <span class="hljs-string">"bar"</span>
+            </span>
+            <br/>
+            <span class="line">  }</span>
+            <br/>
+          </pre>
         </td>
       </tr>
     </table>

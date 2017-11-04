@@ -48,8 +48,22 @@
   {% endcode %}
 </div>
 <div id="replace tabs"
-     data-config-highlight='{"tabReplace":"true", "tabReplaceChar":"|"}'>
+     data-config-highlight='{"tabReplace":true, "tabReplaceChar":"|"}'>
   {% code %}
+  a
+  	b
+  {% endcode %}
+</div>
+<div id="inline replace tabs"
+     data-config-highlight='{"tabReplaceChar":"|"}'>
+  {% code tab_replace:true %}
+  a
+  	b
+  {% endcode %}
+</div>
+<div id="inline replace tabs with number"
+     data-config-highlight='{"tabReplaceChar":"|"}'>
+  {% code tab_replace:2 %}
   a
   	b
   {% endcode %}

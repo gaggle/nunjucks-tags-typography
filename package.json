@@ -19,9 +19,6 @@
     "strip-indent": "^2.0.0",
     "titlecase": "^1.1.2"
   },
-  "peerDependencies": {
-    "nunjucks-tags": "git+https://github.com/gaggle/nunjucks-tags.git"
-  },
   "devDependencies": {
     "codecov": "^2.3.0",
     "dom-compare": "^0.3.1",

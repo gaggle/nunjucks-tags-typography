@@ -239,21 +239,7 @@ describe('test.helpers', function () {
     it('modifies assert to include custom asserters', function () {
       let obj = {}
       helpers.initCustomAsserts(obj)
-      assert(Object.keys(obj).indexOf('xmlEqual') !== -1)
       assert(Object.keys(obj).indexOf('regexMatches') !== -1)
-    })
-
-    it('exposes function to compare alike xml objects', function () {
-      const module = require('assert')  // eslint-disable-line global-require
-      helpers.initCustomAsserts(module)
-      module.xmlEqual(element(), element())
-    })
-
-    it('exposes function that asserts on disalike objects', function () {
-      const module = require('assert')  // eslint-disable-line global-require
-      helpers.initCustomAsserts(module)
-      const fn = () => module.xmlEqual(element('foo="bar"'), element())
-      assert.throws(fn, Error, 'xmlEqual should throw')
     })
 
     it('exposes function to test regex', function () {

@@ -3,11 +3,10 @@
 const assert = require('assert')
 const fs = require('fs')
 const Nunjucks = require('nunjucks-tags')
+const xmlcompare = require('xmlcompare')
 
 const helpers = require('./helpers')
 const tags = require('..')
-
-helpers.initCustomAsserts(assert)
 
 describe('nunjucks-tags-typography', function () {
   const it_ = function (name, tagAsOnly, tagAsSkip, fn) {
@@ -56,9 +55,7 @@ describe('nunjucks-tags-typography', function () {
           let conf = helpers.extractConfig(src)
           tags(nunjucks, conf)
           return nunjucks.render(src.toString(), data)
-            .then(helpers.strToXML)
-            .then(e => e.childNodes[0]) // We need the element itself, not top-level document
-            .then(actual => assert.xmlEqual(expected, actual))
+            .then(actual => xmlcompare(actual, expected))
         })
       }
     })

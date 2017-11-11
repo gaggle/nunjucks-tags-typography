@@ -31,6 +31,7 @@
     "recursive-readdir-sync": "^1.0.6",
     "rewire": "^2.5.2",
     "standard": "^10.0.3",
+    "xmlcompare": "github:gaggle/xmlcompare",
     "xmldom": "^0.1.27"
   },
   "nyc": {

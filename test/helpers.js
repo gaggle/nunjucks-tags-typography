@@ -1,15 +1,11 @@
 /* global describe, it */
 'use strict'
 const assert = require('assert')
-const compare = require('dom-compare').compare
 const fs = require('fs')
 const isStr = require('lodash.isstring')
 const path = require('path')
 const recursiveReaddirSync = require('recursive-readdir-sync')
-const reporter = require('dom-compare').GroupingReporter
 const xmldom = require('xmldom')
-
-const parser = new xmldom.DOMParser()
 
 let DATA_CONFIG_SEARCHSTRING = 'data-config-'
 
@@ -140,21 +136,6 @@ exports.getMatches = function (str, regex) {
  * @param {Module} assert
  */
 exports.initCustomAsserts = function (assert) {
-  if (!assert.xmlEqual) {
-    assert.xmlEqual = function (expected, actual) {
-      let comp = compare(expected, actual, {stripSpaces: true})
-      let message = `Documents are not equal
-${reporter.report(comp)}
-
-Expected document:
-${expected}
-
-Actual document:
-${actual}`
-      assert(comp.getResult(), message)
-    }
-  }
-
   if (!assert.regexMatches) {
     assert.regexMatches = function (regex, str) {
       let typemsg = `'${regex}' is not a RegEx
@@ -231,10 +212,26 @@ exports.readFile = function (path, options) {
 }
 
 /**
- * @param {string} str
- * @returns {Document|Element}
+ * @param str
+ * @param {{}} [opts]
+ * @param {Function} [opts.warning]
+ * @param {Function} [opts.error]
+ * @param {Function} [opts.fatalError]
+ * @returns {Document}
  */
-exports.strToXML = function (str) {
+exports.strToXML = function (str, opts) {
+  opts = opts || {}
+
+  const domOptions = {
+    locator: {},
+    errorHandler: {
+      warning: opts.warning || function (w) {},
+      error: opts.error || function (w) { throw new Error(w) },
+      fatalError: opts.fatalError || function (w) { throw new Error(w) }
+    }
+  }
+
+  const parser = new xmldom.DOMParser(domOptions)
   return parser.parseFromString(str, 'text/xml')
 }
 

@@ -26,7 +26,7 @@
     "lodash.isstring": "^4.0.1",
     "mocha": "^3.5.0",
     "mock-fs": "^4.4.1",
-    "nunjucks-tags": "git+https://github.com/gaggle/nunjucks-tags.git",
+    "nunjucks-tags": "github:gaggle/nunjucks-tags",
     "nyc": "^11.1.0",
     "recursive-readdir-sync": "^1.0.6",
     "rewire": "^2.5.2",

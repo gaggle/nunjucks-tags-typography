@@ -26,9 +26,6 @@ helpers.createRegexTestSuite('code', code, {
   rLineNumber: {
     match: ['line_number:true']
   },
-  rHighlight: {
-    match: ['highlight:true']
-  },
   rFirstLine: {
     match: ['first_line:1']
   },

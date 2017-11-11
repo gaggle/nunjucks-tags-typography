@@ -293,10 +293,30 @@ describe('test.helpers', function () {
     })
   })
 
-  describe('#strToXml', function () {
-    it('converts string to xml object', function () {
-      const el = helpers.strToXML('<div></div>')
-      assert.equal(el.constructor.name, 'Document')
+  describe('#strToXML', function () {
+    it('converts to Document', function () {
+      const result = helpers.strToXML('foo')
+      assert.equal(result.nodeName, '#document')
+    })
+
+    it('throws error on empty str', function () {
+      assert.throws(
+        () => helpers.strToXML(''),
+        Error
+      )
+    })
+
+    it('ignores warnings by default', function () {
+      assert.ok(helpers.strToXML('<img>'))
+    })
+
+    it('allows control over warning handler', function () {
+      assert.throws(
+        () => helpers.strToXML('<img>', {
+          warning: function () { throw new Error('Stop') }
+        }),
+        Error
+      )
     })
   })
 

@@ -7,8 +7,6 @@ const path = require('path')
 const recursiveReaddirSync = require('recursive-readdir-sync')
 const xmldom = require('xmldom')
 
-const parser = new xmldom.DOMParser()
-
 let DATA_CONFIG_SEARCHSTRING = 'data-config-'
 
 /**
@@ -214,10 +212,26 @@ exports.readFile = function (path, options) {
 }
 
 /**
- * @param {string} str
- * @returns {Document|Element}
+ * @param str
+ * @param {{}} [opts]
+ * @param {Function} [opts.warning]
+ * @param {Function} [opts.error]
+ * @param {Function} [opts.fatalError]
+ * @returns {Document}
  */
-exports.strToXML = function (str) {
+exports.strToXML = function (str, opts) {
+  opts = opts || {}
+
+  const domOptions = {
+    locator: {},
+    errorHandler: {
+      warning: opts.warning || function (w) {},
+      error: opts.error || function (w) { throw new Error(w) },
+      fatalError: opts.fatalError || function (w) { throw new Error(w) }
+    }
+  }
+
+  const parser = new xmldom.DOMParser(domOptions)
   return parser.parseFromString(str, 'text/xml')
 }
 
